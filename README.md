@@ -1,4 +1,4 @@
-# vue-chat
+# 👥 vue-chat
 
 ## Project setup
 ```
