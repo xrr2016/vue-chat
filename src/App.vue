@@ -1,13 +1,29 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-  </div>
+  <main id="app">
+    <app-new-user class="new-user" />
+  </main>
 </template>
 
 <script>
-import './App.css'
+import AppNewUser from './components/AppNewUser'
 
 export default {
-  name: "App",
-};
+  name: 'App',
+  components: {
+    AppNewUser: AppNewUser
+  }
+}
 </script>
+
+<style scoped>
+#app {
+  display: grid;
+  background-color: aliceblue;
+}
+.new-user {
+  width: 200px;
+  height: 100px;
+  background-color: aqua;
+}
+</style>
+

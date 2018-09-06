@@ -1,10 +1,27 @@
-import Vue from "vue";
-import Vuex from "vuex";
+import Vue from 'vue'
+import Vuex from 'vuex'
 
-Vue.use(Vuex);
+import AppService from './service'
+
+Vue.use(Vuex)
 
 export default new Vuex.Store({
-  state: {},
-  mutations: {},
-  actions: {}
-});
+  state: {
+    currentUser: null,
+    rooms: [],
+    users: [],
+    messages: []
+  },
+  mutations: {
+    setCurrentUser(state, user) {
+      state.currentUser = user
+    }
+  },
+  actions: {
+    async createUser({ commit }, username) {
+      const user = await AppService.createUser(username)
+      commit('setCurrentUser', user)
+      return Promise.resolve(user)
+    }
+  }
+})

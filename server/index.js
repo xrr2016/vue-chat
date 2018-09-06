@@ -1,4 +1,4 @@
-const uuid = require('uuid/v4')
+// const uuid = require('uuid/v4')
 const cors = require('cors')
 const express = require('express')
 const Chatkit = require('pusher-chatkit-server')
@@ -18,11 +18,11 @@ const chatkit = new Chatkit.default({
   key: process.env.CHATKIT_KEY
 })
 
-app.use('/users', (req, res) => {
+app.post('/user', (req, res) => {
   const { username } = req.body
 
   const user = {
-    id: uuid(),
+    id: username,
     name: username
   }
 
@@ -30,11 +30,7 @@ app.use('/users', (req, res) => {
     .createUser(user)
     .then(() => res.status(201).json({ success: true, message: '创建用户成功', user }))
     .catch(error => {
-      if (error.error_type === 'services/chatkit/user_already_exists') {
-        res.status(409).json({ success: false, message: '用户已存在' })
-      } else {
-        res.status(500).json({ success: false, message: '服务端错误，请重试' })
-      }
+      res.status(error.status).json({ success: false, message: error.error_description })
     })
 })
 
