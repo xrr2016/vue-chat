@@ -1,138 +1,25 @@
 <template>
-  <ul class="message-list" >
-    <app-message v-for="(message, index) of messages" :key="index" :message="message" />
-  </ul>
+<ul class="message-list">
+  <div class="loading" v-if="isLoading">
+    Loading...
+  </div>
+  <template v-else>
+    <app-message-item v-for="(message, index) of messages" :key="index" :message="message" />
+  </template>
+</ul>
 </template>
 
 <script>
-import AppMessage from './AppMessage'
+import { mapState } from 'vuex'
+import AppMessageItem from './AppMessageItem'
 
 export default {
   name: 'AppMessageList',
   components: {
-    AppMessage
+    AppMessageItem
   },
-  data() {
-    return {
-      messages: [
-        {
-          name: 'xrr',
-          time: '2018.09.07 10:32',
-          self: false,
-          text: 'Hello world'
-        },
-        {
-          name: 'xrr',
-          time: '2018.09.07 10:32',
-          self: true,
-          text: 'Hello world'
-        },
-        {
-          name: 'xrr',
-          time: '2018.09.07 10:32',
-          self: false,
-          text: 'Hello world'
-        },
-        {
-          name: 'xrr',
-          time: '2018.09.07 10:32',
-          self: true,
-          text:
-            'Hello worldaaaaaaaaaaa lorem asdasdasdabdib adfbsdafbsafbsif  fjahsjfgadsifgadsj  afhdajfasdf alsf afdhfkjaefjaksb fkjabs kfa afhdkfsa khaffkbfk jfsdkfbsdkbf fsdbfkjsbfksb  afbdfkjbfkebjf b jefbakfb kabfeba  keba befbefb  '
-        },
-        {
-          name: 'xrr',
-          time: '2018.09.07 10:32',
-          self: false,
-          text:
-            'Hello worldaaaaaaaaaaa lorem asdasdasdabdib adfbsdafbsafbsif  fjahsjfgadsifgadsj  afhdajfasdf alsf afdhfkjaefjaksb fkjabs kfa afhdkfsa khaffkbfk jfsdkfbsdkbf fsdbfkjsbfksb  afbdfkjbfkebjf b jefbakfb kabfeba  keba befbefb '
-        },
-        {
-          name: 'xrr',
-          time: '2018.09.07 10:32',
-          self: false,
-          text:
-            'Hello worldaaaaaaaaaaa lorem asdasdasdabdib adfbsdafbsafbsif  fjahsjfgadsifgadsj  afhdajfasdf alsf afdhfkjaefjaksb fkjabs kfa afhdkfsa khaffkbfk jfsdkfbsdkbf fsdbfkjsbfksb  afbdfkjbfkebjf b jefbakfb kabfeba  keba befbefb '
-        },
-        {
-          name: 'xrr',
-          time: '2018.09.07 10:32',
-          self: false,
-          text:
-            'Hello worldaaaaaaaaaaa lorem asdasdasdabdib adfbsdafbsafbsif  fjahsjfgadsifgadsj  afhdajfasdf alsf afdhfkjaefjaksb fkjabs kfa afhdkfsa khaffkbfk jfsdkfbsdkbf fsdbfkjsbfksb  afbdfkjbfkebjf b jefbakfb kabfeba  keba befbefb '
-        },
-        {
-          name: 'xrr',
-          time: '2018.09.07 10:32',
-          self: false,
-          text:
-            'Hello worldaaaaaaaaaaa lorem asdasdasdabdib adfbsdafbsafbsif  fjahsjfgadsifgadsj  afhdajfasdf alsf afdhfkjaefjaksb fkjabs kfa afhdkfsa khaffkbfk jfsdkfbsdkbf fsdbfkjsbfksb  afbdfkjbfkebjf b jefbakfb kabfeba  keba befbefb '
-        },
-        {
-          name: 'xrr',
-          time: '2018.09.07 10:32',
-          self: false,
-          text:
-            'Hello worldaaaaaaaaaaa lorem asdasdasdabdib adfbsdafbsafbsif  fjahsjfgadsifgadsj  afhdajfasdf alsf afdhfkjaefjaksb fkjabs kfa afhdkfsa khaffkbfk jfsdkfbsdkbf fsdbfkjsbfksb  afbdfkjbfkebjf b jefbakfb kabfeba  keba befbefb '
-        },
-        {
-          name: 'xrr',
-          time: '2018.09.07 10:32',
-          self: false,
-          text:
-            'Hello worldaaaaaaaaaaa lorem asdasdasdabdib adfbsdafbsafbsif  fjahsjfgadsifgadsj  afhdajfasdf alsf afdhfkjaefjaksb fkjabs kfa afhdkfsa khaffkbfk jfsdkfbsdkbf fsdbfkjsbfksb  afbdfkjbfkebjf b jefbakfb kabfeba  keba befbefb '
-        },
-        {
-          name: 'xrr',
-          time: '2018.09.07 10:32',
-          self: false,
-          text:
-            'Hello worldaaaaaaaaaaa lorem asdasdasdabdib adfbsdafbsafbsif  fjahsjfgadsifgadsj  afhdajfasdf alsf afdhfkjaefjaksb fkjabs kfa afhdkfsa khaffkbfk jfsdkfbsdkbf fsdbfkjsbfksb  afbdfkjbfkebjf b jefbakfb kabfeba  keba befbefb '
-        },
-        {
-          name: 'xrr',
-          time: '2018.09.07 10:32',
-          self: false,
-          text:
-            'Hello worldaaaaaaaaaaa lorem asdasdasdabdib adfbsdafbsafbsif  fjahsjfgadsifgadsj  afhdajfasdf alsf afdhfkjaefjaksb fkjabs kfa afhdkfsa khaffkbfk jfsdkfbsdkbf fsdbfkjsbfksb  afbdfkjbfkebjf b jefbakfb kabfeba  keba befbefb '
-        },
-        {
-          name: 'xrr',
-          time: '2018.09.07 10:32',
-          self: false,
-          text:
-            'Hello worldaaaaaaaaaaa lorem asdasdasdabdib adfbsdafbsafbsif  fjahsjfgadsifgadsj  afhdajfasdf alsf afdhfkjaefjaksb fkjabs kfa afhdkfsa khaffkbfk jfsdkfbsdkbf fsdbfkjsbfksb  afbdfkjbfkebjf b jefbakfb kabfeba  keba befbefb '
-        },
-        {
-          name: 'xrr',
-          time: '2018.09.07 10:32',
-          self: false,
-          text:
-            'Hello worldaaaaaaaaaaa lorem asdasdasdabdib adfbsdafbsafbsif  fjahsjfgadsifgadsj  afhdajfasdf alsf afdhfkjaefjaksb fkjabs kfa afhdkfsa khaffkbfk jfsdkfbsdkbf fsdbfkjsbfksb  afbdfkjbfkebjf b jefbakfb kabfeba  keba befbefb '
-        },
-        {
-          name: 'xrr',
-          time: '2018.09.07 10:32',
-          self: false,
-          text:
-            'Hello worldaaaaaaaaaaa lorem asdasdasdabdib adfbsdafbsafbsif  fjahsjfgadsifgadsj  afhdajfasdf alsf afdhfkjaefjaksb fkjabs kfa afhdkfsa khaffkbfk jfsdkfbsdkbf fsdbfkjsbfksb  afbdfkjbfkebjf b jefbakfb kabfeba  keba befbefb '
-        },
-        {
-          name: 'xrr',
-          time: '2018.09.07 10:32',
-          self: false,
-          text:
-            'Hello worldaaaaaaaaaaa lorem asdasdasdabdib adfbsdafbsafbsif  fjahsjfgadsifgadsj  afhdajfasdf alsf afdhfkjaefjaksb fkjabs kfa afhdkfsa khaffkbfk jfsdkfbsdkbf fsdbfkjsbfksb  afbdfkjbfkebjf b jefbakfb kabfeba  keba befbefb '
-        },
-        {
-          name: 'xrr',
-          time: '2018.09.07 10:32',
-          self: false,
-          text:
-            'Hello worldaaaaaaaaaaa lorem asdasdasdabdib adfbsdafbsafbsif  fjahsjfgadsifgadsj  afhdajfasdf alsf afdhfkjaefjaksb fkjabs kfa afhdkfsa khaffkbfk jfsdkfbsdkbf fsdbfkjsbfksb  afbdfkjbfkebjf b jefbakfb kabfeba  keba befbefb '
-        }
-      ]
-    }
+  computed: {
+    ...mapState(['messages', 'isLoading'])
   }
 }
 </script>

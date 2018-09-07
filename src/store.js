@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+// import Chatkit from '@pusher/chatkit'
 
 import AppService from './service'
 
@@ -8,7 +9,8 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {
     isLoading: true,
-    currentUser: null,
+    currentUser: {},
+    currentRoom: {},
     rooms: [],
     users: [],
     messages: [],
@@ -19,8 +21,14 @@ const store = new Vuex.Store({
     setLoaded(state) {
       state.isLoading = false
     },
-    setCurrentUser(state, user) {
-      state.currentUser = user
+    setCurrentUser(state, currentUser) {
+      state.currentUser = currentUser
+    },
+    setCurrentRoom(state, currentRoom) {
+      state.currentRoom = currentRoom
+    },
+    addNewMessage(state, message) {
+      state.messages.push(message)
     }
   },
   actions: {
@@ -30,16 +38,24 @@ const store = new Vuex.Store({
       commit('setLoaded')
       return Promise.resolve(user)
     },
-    async initUser({ commit }, username) {
-      const user = await AppService.initUser(username)
-      console.log(user)
-      commit('setCurrentUser', user)
+    async initChatApp({ commit }, username) {
+      const currentUser = await AppService.initUser(username)
+      const currentRoom = await currentUser.subscribeToRoom({
+        roomId: 15624742,
+        messageLimit: 100,
+        hooks: {
+          onNewMessage: message => {
+            commit('addNewMessage', message)
+          }
+        }
+      })
+      commit('setCurrentUser', currentUser)
+      commit('setCurrentRoom', currentRoom)
       commit('setLoaded')
-      return Promise.resolve(user)
     }
   }
 })
 
-store.dispatch('initUser', 'xrr')
+store.dispatch('initChatApp', 'Admin')
 
 export default store
