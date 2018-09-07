@@ -14,6 +14,7 @@ const store = new Vuex.Store({
     rooms: [],
     users: [],
     messages: [],
+    typingUsers: [],
     theme: 'light',
     layout: 'normal'
   },
@@ -29,6 +30,15 @@ const store = new Vuex.Store({
     },
     addNewMessage(state, message) {
       state.messages.push(message)
+    },
+    addTypingUser(state, typingUser) {
+      if (state.typingUsers.includes(typingUser)) {
+        return
+      }
+      state.typingUsers.unshift(typingUser)
+    },
+    removeTypingUser(state, typingUser) {
+      state.typingUsers = state.typingUsers.filter(user => user.name !== typingUser.name)
     }
   },
   actions: {
@@ -46,6 +56,13 @@ const store = new Vuex.Store({
         hooks: {
           onNewMessage: message => {
             commit('addNewMessage', message)
+          },
+          onUserStartedTyping: user => {
+            console.log(user)
+            commit('addTypingUser', user)
+          },
+          onUserStoppedTyping: user => {
+            commit('removeTypingUser', user)
           }
         }
       })

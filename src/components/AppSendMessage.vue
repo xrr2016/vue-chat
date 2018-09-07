@@ -1,27 +1,44 @@
 <template>
 <form class="send-message" @submit.prevent="handleSubmit">
-  <input class="input" type="text" v-model="text" @change="handleChange" placeholder="说点什么..." />
+  <input class="input" type="text" v-model="text" placeholder="说点什么..." />
   <button class="button" type="submit">发送</button>
 </form>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 
 export default {
   name: 'AppSendMessage',
   data() {
     return {
       text: '',
+      isTyping: false,
       isSending: false
     }
+  },
+  watch: {
+    text: 'handleChange'
   },
   computed: {
     ...mapState(['currentUser', 'currentRoom'])
   },
   methods: {
-    handleChange() {
-      console.log(`${this.currentUser.id} is typing: ${this.text}`)
+    ...mapMutations(['addTypingUser', 'removeTypingUser']),
+    handleChange(text, prevText) {
+      this.addTypingUser(this.currentUser)
+      const timeout = setTimeout(() => {
+        // if (text === prevText) {
+        this.removeTypingUser(this.currentUser)
+        // }
+        clearTimeout(timeout)
+      }, 1000)
+      console.log(this.currentRoom.id)
+      this.currentUser
+        .isTypingIn({
+          roomId: this.currentRoom.id
+        })
+        .catch(error => console.error(error))
     },
     handleSubmit() {
       if (!this.text || this.isSending) {

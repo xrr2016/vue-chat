@@ -15,9 +15,6 @@ export default {
       required: true
     }
   },
-  mounted() {
-    console.log(this.message.senderId, this.currentUser.id)
-  },
   computed: {
     ...mapState(['currentUser'])
   }
