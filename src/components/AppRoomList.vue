@@ -1,95 +1,27 @@
 <template>
-  <ul class="room-list">
+<ul class="room-list">
+  <div v-if="isLoading">Loading...</div>
+  <template v-else>
     <li class="room-item room-item--active">
-      <span class="title">NBA</span>
-      <span class="number">100</span>
+      <span class="title">{{ currentRoom.name }}</span>
+      <span class="number">{{ currentRoom.userIds.length }}</span>
     </li>
-     <li class="room-item">
-      <span class="title">Rocket</span>
-      <span class="number">100</span>
+    <li class="room-item" v-for="room of rooms" :key="room.id">
+      <span class="title">{{ room.name }}</span>
+      <span class="number">{{ room.userIds.length }}</span>
     </li>
-     <li class="room-item">
-      <span class="title">Anime</span>
-      <span class="number">100</span>
-    </li>
-     <li class="room-item">
-      <span class="title">Game</span>
-      <span class="number">100</span>
-    </li>
-     <li class="room-item">
-      <span class="title">Rocket</span>
-      <span class="number">100</span>
-    </li>
-     <li class="room-item">
-      <span class="title">Code</span>
-      <span class="number">100</span>
-    </li>
-      <li class="room-item">
-      <span class="title">Rocket</span>
-      <span class="number">100</span>
-    </li>
-     <li class="room-item">
-      <span class="title">Anime</span>
-      <span class="number">100</span>
-    </li>
-     <li class="room-item">
-      <span class="title">Game</span>
-      <span class="number">100</span>
-    </li>
-     <li class="room-item">
-      <span class="title">Rocket</span>
-      <span class="number">100</span>
-    </li>
-     <li class="room-item">
-      <span class="title">Code</span>
-      <span class="number">100</span>
-    </li>
-      <li class="room-item">
-      <span class="title">Rocket</span>
-      <span class="number">100</span>
-    </li>
-     <li class="room-item">
-      <span class="title">Anime</span>
-      <span class="number">100</span>
-    </li>
-     <li class="room-item">
-      <span class="title">Game</span>
-      <span class="number">100</span>
-    </li>
-     <li class="room-item">
-      <span class="title">Rocket</span>
-      <span class="number">100</span>
-    </li>
-     <li class="room-item">
-      <span class="title">Code</span>
-      <span class="number">100</span>
-    </li>
-      <li class="room-item">
-      <span class="title">Rocket</span>
-      <span class="number">100</span>
-    </li>
-     <li class="room-item">
-      <span class="title">Anime</span>
-      <span class="number">100</span>
-    </li>
-     <li class="room-item">
-      <span class="title">Game</span>
-      <span class="number">100</span>
-    </li>
-     <li class="room-item">
-      <span class="title">Rocket</span>
-      <span class="number">100</span>
-    </li>
-     <li class="room-item">
-      <span class="title">Code</span>
-      <span class="number">100</span>
-    </li>
-  </ul>
+  </template>
+</ul>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
-  name: 'AppRoomList'
+  name: 'AppRoomList',
+  computed: {
+    ...mapState(['isLoading', 'rooms', 'currentRoom'])
+  }
 }
 </script>
 

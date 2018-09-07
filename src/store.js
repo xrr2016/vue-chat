@@ -28,6 +28,9 @@ const store = new Vuex.Store({
     setCurrentRoom(state, currentRoom) {
       state.currentRoom = currentRoom
     },
+    setRooms(state, joinableRooms) {
+      state.rooms = joinableRooms
+    },
     addNewMessage(state, message) {
       state.messages.push(message)
     },
@@ -66,8 +69,11 @@ const store = new Vuex.Store({
           }
         }
       })
+      const rooms = await currentUser.getJoinableRooms()
+
       commit('setCurrentUser', currentUser)
       commit('setCurrentRoom', currentRoom)
+      commit('setRooms', rooms)
       commit('setLoaded')
     }
   }
