@@ -5,8 +5,9 @@ import AppService from './service'
 
 Vue.use(Vuex)
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
   state: {
+    isLoading: true,
     currentUser: null,
     rooms: [],
     users: [],
@@ -15,6 +16,9 @@ export default new Vuex.Store({
     layout: 'normal'
   },
   mutations: {
+    setLoaded(state) {
+      state.isLoading = false
+    },
     setCurrentUser(state, user) {
       state.currentUser = user
     }
@@ -23,7 +27,19 @@ export default new Vuex.Store({
     async createUser({ commit }, username) {
       const user = await AppService.createUser(username)
       commit('setCurrentUser', user)
+      commit('setLoaded')
+      return Promise.resolve(user)
+    },
+    async initUser({ commit }, username) {
+      const user = await AppService.initUser(username)
+      console.log(user)
+      commit('setCurrentUser', user)
+      commit('setLoaded')
       return Promise.resolve(user)
     }
   }
 })
+
+store.dispatch('initUser', 'xrr')
+
+export default store

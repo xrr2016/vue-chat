@@ -1,17 +1,27 @@
 <template>
-  <div class="current-user">
-    <div class="avatar">轻</div>
-    <p class="name">轻剑快马</p>
-    <!-- {{ currentUser.name }} -->
-  </div>
+<div class="current-user">
+  <div v-if="isLoading">Loading...</div>
+  <template v-else>
+    <div class="avatar">{{ currentUser.name[0] }}</div>
+    <p class="name">{{ currentUser.name }} </p>
+    <!-- <small>createAt: {{ currentUser.created_at | createAt }}</small> -->
+  </template>
+</div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+
 export default {
   name: 'AppCurrentUser',
   computed: {
-    ...mapState(['currentUser'])
+    ...mapState(['currentUser', 'isLoading'])
+  },
+  filters: {
+    createAt(dateStr) {
+      // console.log(dateStr)
+      // return new D
+    }
   }
 }
 </script>
@@ -25,6 +35,7 @@ export default {
   border-right: 1px solid #eee;
   border-bottom: 1px solid #eee;
 }
+
 .avatar {
   width: 30px;
   height: 30px;
@@ -35,6 +46,7 @@ export default {
   border-radius: 50%;
   background-color: #333;
 }
+
 .name {
   color: #666;
   font-size: 1.4rem;

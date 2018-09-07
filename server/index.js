@@ -1,21 +1,21 @@
-// const uuid = require('uuid/v4')
 const cors = require('cors')
 const express = require('express')
+const morgan = require('morgan')
 const Chatkit = require('pusher-chatkit-server')
-
-require('dotenv').config()
+const config = require('../config')
 
 const app = express()
-const PORT = process.env.SERVER_PORT || 4399
+const PORT = config.SERVER_PORT || 4399
 
 app.use(cors())
+app.use(morgan('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
 // eslint-disable-next-line
 const chatkit = new Chatkit.default({
-  instanceLocator: process.env.CHATKIT_INSTANCELOCATOR,
-  key: process.env.CHATKIT_KEY
+  instanceLocator: config.CHATKIT_INSTANCELOCATOR,
+  key: config.CHATKIT_KEY
 })
 
 app.post('/user', (req, res) => {
@@ -35,7 +35,7 @@ app.post('/user', (req, res) => {
 })
 
 app.post('/auth', (req, res) => {
-  const data = chatkit.authenticate({ userId: req.query.userId })
+  const data = chatkit.authenticate({ userId: req.query.user_id })
   res.status(data.status).json(data.body)
 })
 

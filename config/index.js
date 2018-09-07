@@ -1,0 +1,12 @@
+const SERVER_PORT = 3699
+const SERVER_HOST = 'http://localhost'
+const CHATKIT_INSTANCELOCATOR = 'v1:us1:938c75db-c8b6-45c4-ac10-a2a82a786acd'
+const CHATKIT_KEY =
+  '16fee750-5ce6-413a-a843-b435cca1c0be:0eP580Dn+2x6Iib9m9y3Fy6V18WoXEHlLlK43k0vdaI='
+
+module.exports = {
+  SERVER_PORT,
+  SERVER_HOST,
+  CHATKIT_INSTANCELOCATOR,
+  CHATKIT_KEY
+}
