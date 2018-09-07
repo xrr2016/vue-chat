@@ -10,7 +10,9 @@ export default new Vuex.Store({
     currentUser: null,
     rooms: [],
     users: [],
-    messages: []
+    messages: [],
+    theme: 'light',
+    layout: 'normal'
   },
   mutations: {
     setCurrentUser(state, user) {

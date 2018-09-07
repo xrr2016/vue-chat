@@ -653,6 +653,13 @@
   version "1.1.2"
   resolved "http://registry.npm.taobao.org/@nodelib/fs.stat/download/@nodelib/fs.stat-1.1.2.tgz#54c5a964462be3d4d78af631363c18d6fa91ac26"
 
+"@pusher/chatkit@^0.7.17":
+  version "0.7.17"
+  resolved "http://registry.npm.taobao.org/@pusher/chatkit/download/@pusher/chatkit-0.7.17.tgz#2f3229e3ec04590924d6f6719da4d1e158825f57"
+  dependencies:
+    pusher-platform "^0.15.1"
+    ramda "^0.25.0"
+
 "@vue/babel-preset-app@^3.0.1":
   version "3.0.1"
   resolved "http://registry.npm.taobao.org/@vue/babel-preset-app/download/@vue/babel-preset-app-3.0.1.tgz#24188938e93f259f7141a6a1190da9c511d123d8"
@@ -5702,6 +5709,10 @@ pusher-platform-node@~0.13.0:
     jsonwebtoken "^8.3.0"
     request "^2.81.0"
 
+pusher-platform@^0.15.1:
+  version "0.15.1"
+  resolved "http://registry.npm.taobao.org/pusher-platform/download/pusher-platform-0.15.1.tgz#e8ff7e59f8440ddae6dd71a50e4796400b7ec62f"
+
 q@^1.1.2:
   version "1.5.1"
   resolved "http://registry.npm.taobao.org/q/download/q-1.5.1.tgz#7e32f75b41381291d04611f1bf14109ac00651d7"
@@ -5725,6 +5736,10 @@ querystring@0.2.0:
 querystringify@^2.0.0:
   version "2.0.0"
   resolved "http://registry.npm.taobao.org/querystringify/download/querystringify-2.0.0.tgz#fa3ed6e68eb15159457c89b37bc6472833195755"
+
+ramda@^0.25.0:
+  version "0.25.0"
+  resolved "http://registry.npm.taobao.org/ramda/download/ramda-0.25.0.tgz#8fdf68231cffa90bc2f9460390a0cb74a29b29a9"
 
 randomatic@^3.0.0:
   version "3.1.0"

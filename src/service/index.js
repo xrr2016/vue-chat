@@ -1,5 +1,5 @@
 function createUser(username) {
-  return fetch('http://localhost:3699/user', {
+  return fetch(`http://localhost:3699/user`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

@@ -6,7 +6,7 @@ const Chatkit = require('pusher-chatkit-server')
 require('dotenv').config()
 
 const app = express()
-const PORT = process.env.PORT || 4399
+const PORT = process.env.SERVER_PORT || 4399
 
 app.use(cors())
 app.use(express.json())
