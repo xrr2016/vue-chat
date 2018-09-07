@@ -1,20 +1,50 @@
 <template>
-  <form class="send-message" @submit.prevent="handleSubmit">
-    <input class="input" type="text" v-model="text" />
-    <button class="button" type="submit">发送</button>
-  </form>
+<form class="send-message" @submit.prevent="handleSubmit">
+  <input class="input" type="text" v-model="text" @change="handleChange" placeholder="说点什么..." />
+  <button class="button" type="submit">发送</button>
+</form>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'AppSendMessage',
   data() {
     return {
-      text: ''
+      text: '',
+      isSending: false
     }
   },
+  computed: {
+    ...mapState(['currentUser', 'currentRoom'])
+  },
   methods: {
-    handleSubmit() {}
+    handleChange() {
+      console.log(`${this.currentUser.id} is typing: ${this.text}`)
+    },
+    handleSubmit() {
+      if (!this.text || this.isSending) {
+        return
+      }
+      this.isSending = true
+      this.currentUser
+        .sendMessage({
+          text: this.text,
+          roomId: this.currentRoom.id
+        })
+        .then(messageId => {
+          this.text = ''
+          console.log(messageId)
+        })
+        .then(() => {
+          const timeout = setTimeout(() => {
+            this.isSending = false
+            clearTimeout(timeout)
+          }, 500)
+        })
+        .catch(error => console.log(error))
+    }
   }
 }
 </script>
@@ -25,6 +55,7 @@ export default {
   justify-content: flex-start;
   align-items: stretch;
 }
+
 .input {
   flex: 1;
   font-size: 2.4rem;
@@ -33,6 +64,7 @@ export default {
   padding: 1em;
   text-decoration: underline;
 }
+
 .button {
   width: 16rem;
   border: none;
