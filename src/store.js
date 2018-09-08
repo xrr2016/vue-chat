@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-// import Chatkit from '@pusher/chatkit'
 
 import AppService from './service'
 
@@ -8,9 +7,9 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
-    isLoading: true,
-    currentUser: {},
-    currentRoom: {},
+    isLoading: false,
+    currentUser: null,
+    currentRoom: null,
     rooms: [],
     users: [],
     messages: [],
@@ -19,6 +18,9 @@ const store = new Vuex.Store({
     layout: 'normal'
   },
   mutations: {
+    setLoading(state) {
+      state.isLoading = true
+    },
     setLoaded(state) {
       state.isLoading = false
     },
@@ -46,9 +48,10 @@ const store = new Vuex.Store({
   },
   actions: {
     async createUser({ commit }, username) {
+      commit('setLoading')
       const user = await AppService.createUser(username)
       commit('setCurrentUser', user)
-      commit('setLoaded')
+      commit('initChatApp', user.name)
       return Promise.resolve(user)
     },
     async initChatApp({ commit }, username) {
@@ -61,12 +64,14 @@ const store = new Vuex.Store({
             commit('addNewMessage', message)
           },
           onUserStartedTyping: user => {
-            console.log(user)
             commit('addTypingUser', user)
           },
           onUserStoppedTyping: user => {
             commit('removeTypingUser', user)
-          }
+          },
+          onUserCameOnline: user => console.log(user),
+          onUserWentOffline: user => console.log(user),
+          onUserJoined: user => console.log(user)
         }
       })
       const rooms = await currentUser.getJoinableRooms()
@@ -79,6 +84,10 @@ const store = new Vuex.Store({
   }
 })
 
-store.dispatch('initChatApp', 'Admin')
+const currentUser = localStorage.getItem('CHAT_CURRENT_USER')
+
+if (currentUser) {
+  store.dispatch('initChatApp', currentUser.name)
+}
 
 export default store

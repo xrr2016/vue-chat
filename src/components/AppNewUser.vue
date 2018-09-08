@@ -1,13 +1,10 @@
 <template>
 <section class="new-user">
-  <div class="new-user__content">
-    <h2 class="new-user__title">你的名字是？</h2>
-    <p v-show="isCreating">创建中</p>
-    <p v-show="isDone">创建完毕</p>
-    <form @submit.prevent="handleSubmit">
-      <input class="input is-primary" type="text" v-model="username" />
-    </form>
-  </div>
+  <div class="mdl-progress mdl-progress__indeterminate" style="width: 100%;"></div>
+  <h2 class="new-user__title">你的名字是？</h2>
+  <form class="new-user__form" @submit.prevent="handleSubmit">
+    <input class="mdl-textfield__input new-user__input" type="text" v-model="username"  placeholder="Enter Your Name"/>
+  </form>
 </section>
 </template>
 
@@ -18,19 +15,13 @@ export default {
   name: 'AppNewUser',
   data() {
     return {
-      isCreating: false,
-      isDone: false,
       username: ''
     }
   },
   methods: {
     ...mapActions(['createUser']),
     handleSubmit() {
-      this.isCreating = true
-      this.createUser(this.username).then(user => {
-        this.isLoading = false
-        this.isDone = true
-      })
+      this.createUser(this.username)
     }
   }
 }
@@ -43,18 +34,25 @@ export default {
   left: 0;
   z-index: 10;
   display: flex;
-  justify-content: center;
+  flex-flow: column wrap;
+  justify-content: flex-start;
   align-items: center;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.15);
 }
-.new-user__content {
-  width: 480px;
-  height: 320px;
-  padding: 32px;
-  transform: translateY(-50%);
-  background-color: #fff;
-  box-shadow: 0 0 2px #eee;
+
+.new-user__title {
+  margin-top: 10%;
+  color: #666;
+  font-size: 3rem;
+  text-align: center;
+}
+
+.new-user__input {
+  width: 720px;
+  color: #333;
+  padding: 1em;
+  text-align: center;
+  outline: none;
 }
 </style>
