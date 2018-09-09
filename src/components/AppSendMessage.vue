@@ -1,6 +1,6 @@
 <template>
 <form class="send-message" @submit.prevent="handleSubmit">
-  <input class="input" type="text" v-model="text" placeholder="说点什么..." />
+  <input class="input" type="text" v-model="text" autofocus required placeholder="说点什么..." />
   <button class="button" type="submit">发送</button>
 </form>
 </template>
@@ -88,6 +88,6 @@ export default {
   color: #fff;
   font-size: 2rem;
   font-weight: bold;
-  background-color: slateblue;
+  background-color: #00b894;
 }
 </style>

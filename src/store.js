@@ -6,12 +6,13 @@ Vue.use(Vuex)
 const Chatkit = require('@pusher/chatkit')
 const config = require('../config')
 
-export const CHAT_USER = 'CHAT_USER'
+export const CHAT_USER_INFO = 'CHAT_USER_INFO'
 export const CHAT_LAST_ROOM_ID = 'CHAT_LAST_ROOM_ID'
 
 const store = new Vuex.Store({
   state: {
     isLoading: false,
+    userInfo: null,
     currentUser: null,
     currentRoom: null,
     lastRoom: null,
@@ -35,6 +36,12 @@ const store = new Vuex.Store({
     },
     clearErrorMessage(state) {
       state.errorMessage = ''
+    },
+    setUserInfo(state, userInfo) {
+      state.userInfo = userInfo
+    },
+    clearUserInfo(state) {
+      state.userInfo = null
     },
     setCurrentUser(state, currentUser) {
       state.currentUser = currentUser
@@ -74,10 +81,12 @@ const store = new Vuex.Store({
       if (result.success) {
         const user = result.user
         dispatch('initChatApp', user.name)
-        localStorage.setItem(CHAT_USER, JSON.stringify(user))
+        localStorage.setItem(CHAT_USER_INFO, JSON.stringify(user))
       } else {
         if (result.message === 'User with given id already exists') {
           commit('setErrorMessage', '用户已存在请重试')
+        } else {
+          commit('setErrorMessage', result.message)
         }
         commit('setLoaded')
       }
@@ -91,7 +100,10 @@ const store = new Vuex.Store({
           url: `${config.SERVER_HOST}:${config.SERVER_PORT}/auth`
         })
       })
-      const currentUser = await chatManager.connect()
+
+      const currentUser = await chatManager.connect().catch(error => {
+        commit('setErrorMessage', error.message)
+      })
       const rooms = await currentUser.getJoinableRooms()
 
       commit('setCurrentUser', currentUser)
@@ -125,11 +137,12 @@ const store = new Vuex.Store({
 })
 
 try {
-  const currentUser = JSON.parse(localStorage.getItem(CHAT_USER))
+  const userInfo = JSON.parse(localStorage.getItem(CHAT_USER_INFO))
   const lastRoomId = JSON.parse(localStorage.getItem(CHAT_LAST_ROOM_ID))
 
-  if (currentUser) {
-    store.dispatch('initChatApp', currentUser.name, lastRoomId)
+  if (userInfo) {
+    store.commit('setUserInfo', userInfo)
+    store.dispatch('initChatApp', userInfo.name, lastRoomId)
   }
 } catch (error) {
   console.log(error)

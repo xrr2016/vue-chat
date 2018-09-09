@@ -17,7 +17,7 @@ export default {
     AppMessageItem
   },
   computed: {
-    ...mapState(['messages'])
+    ...mapState(['messages', 'isLoading'])
   }
 }
 </script>

@@ -1,6 +1,7 @@
 <template>
 <section class="new-user">
-  <form class="new-user__form" v-if="!hasLoginedUser" @submit.prevent="handleSubmit">
+  <div class="user-info" v-if="userInfo">{{ userInfo.name }}</div>
+  <form class="new-user__form" v-else @submit.prevent="handleSubmit">
     <input class="new-user__input" @focus="handleFoucs" @input="handleInput" @blur="handleBlur" v-model="username" placeholder="输入你的名字" autofocus required />
   </form>
   <div class="new-user__stat">
@@ -11,22 +12,10 @@
 </template>
 
 <script>
-import { CHAT_USER } from '../store.js'
 import { mapState, mapActions, mapMutations } from 'vuex'
 
 export default {
   name: 'AppNewUser',
-  created() {
-    try {
-      const currentUser = JSON.parse(localStorage.getItem(CHAT_USER))
-
-      if (currentUser) {
-        this.hasLoginedUser = true
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  },
   data() {
     return {
       username: '',
@@ -35,7 +24,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['isLoading', 'errorMessage'])
+    ...mapState(['isLoading', 'errorMessage', 'userInfo'])
   },
   methods: {
     ...mapActions(['createUser']),
@@ -69,6 +58,10 @@ export default {
   align-items: center;
   width: 100vw;
   height: 100vh;
+}
+
+.user-info {
+  margin-bottom: 1rem;
 }
 
 .new-user__form {
