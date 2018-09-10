@@ -1,6 +1,6 @@
 <template>
 <ul class="room-list">
-  <div v-if="isLoading && rooms">Loading...</div>
+  <div v-if="isLoading">Loading...</div>
   <template v-else>
     <li class="room-item room-item--active" v-if="currentRoom">
       <span class="title">{{ currentRoom.name }}</span>
@@ -51,10 +51,6 @@ export default {
 
 .room-item:hover {
   background-color: #eee;
-}
-
-.room-list:hover .room-item:not(:hover) {
-  opacity: 0.6;
 }
 
 .room-item--active {

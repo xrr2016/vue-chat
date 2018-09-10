@@ -1,8 +1,9 @@
 <template>
-<form class="send-message" @submit.prevent="handleSubmit">
+<form class="send-message" v-if="currentRoom" @submit.prevent="handleSubmit">
   <input class="input" type="text" v-model="text" autofocus required placeholder="说点什么..." />
   <button class="button" type="submit">发送</button>
 </form>
+<div class="no-current-room" v-else>还没有加入房间</div>
 </template>
 
 <script>
@@ -89,5 +90,13 @@ export default {
   font-size: 2rem;
   font-weight: bold;
   background-color: #00b894;
+}
+
+.no-current-room {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  color: #666;
+  text-align: center;
 }
 </style>

@@ -52,6 +52,9 @@ const store = new Vuex.Store({
     setRooms(state, joinableRooms) {
       state.rooms = joinableRooms
     },
+    addNewRoom(state, room) {
+      state.rooms.push(room)
+    },
     addNewMessage(state, message) {
       state.messages.push(message)
     },
@@ -91,7 +94,7 @@ const store = new Vuex.Store({
         commit('setLoaded')
       }
     },
-    async initChatApp({ commit }, userId, lastRoomId) {
+    async initChatApp({ commit, dispatch }, userId, lastRoomId) {
       commit('setLoading')
       const chatManager = new Chatkit.ChatManager({
         userId,
@@ -104,10 +107,8 @@ const store = new Vuex.Store({
       const currentUser = await chatManager.connect().catch(error => {
         commit('setErrorMessage', error.message)
       })
-      const rooms = await currentUser.getJoinableRooms()
-
       commit('setCurrentUser', currentUser)
-      commit('setRooms', rooms)
+      dispatch('getRooms')
 
       if (lastRoomId) {
         const currentRoom = await currentUser.subscribeToRoom({
@@ -132,6 +133,24 @@ const store = new Vuex.Store({
       }
 
       commit('setLoaded')
+    },
+    async getRooms({ state, commit }) {
+      const rooms = await state.currentUser.getJoinableRooms()
+      commit('setRooms', rooms)
+    },
+    async createRoom({ state, commit }, name) {
+      return state.currentUser
+        .createRoom({
+          name,
+          private: false
+        })
+        .then(room => {
+          commit('addNewRoom', room)
+          console.log(`Created room called ${room.name}`)
+        })
+        .catch(err => {
+          console.log(`Error creating room ${err}`)
+        })
     }
   }
 })

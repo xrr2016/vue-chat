@@ -23,6 +23,11 @@ export default {
 </script>
 
 <style scoped>
+.loading {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+}
 .message-list {
   display: flex;
   flex-direction: column;
