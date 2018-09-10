@@ -1,27 +1,41 @@
 <template>
 <div class="current-user">
-  <div v-if="isLoading">Loading...</div>
-  <template v-else>
-    <div class="avatar">{{ currentUser.name[0] }}</div>
-    <p class="name">{{ currentUser.name }} </p>
+  <div class="avatar">{{ currentUser.name[0] }}</div>
+  <p class="name">{{ currentUser.name }} </p>
+  <Dropdown placement="bottom-start">
     <Icon type="ios-menu" size="24" />
-  </template>
+    <DropdownMenu slot="list">
+      <DropdownItem>
+        <span style="padding-right: 1rem;">夜间模式</span>
+        <i-switch v-model="nightMode">
+          <span slot="open">On</span>
+          <span slot="close">Off</span>
+        </i-switch>
+      </DropdownItem>
+      <DropdownItem>退出</DropdownItem>
+    </DropdownMenu>
+  </Dropdown>
 </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 
 export default {
   name: 'AppCurrentUser',
   computed: {
     ...mapState(['currentUser', 'isLoading'])
   },
-  filters: {
-    createAt(dateStr) {
-      // console.log(dateStr)
-      // return new D
+  data() {
+    return {
+      nightMode: false
     }
+  },
+  watch: {
+    nightMode: 'toggleDarkTheme'
+  },
+  methods: {
+    ...mapMutations(['toggleDarkTheme'])
   }
 }
 </script>

@@ -14,8 +14,7 @@ const store = new Vuex.Store({
     rooms: [],
     users: [],
     messages: [],
-    theme: 'light',
-    layout: 'normal',
+    darkTheme: false,
     errorMessage: ''
   },
   mutations: {
@@ -63,14 +62,8 @@ const store = new Vuex.Store({
     clearRoomMessages(state) {
       state.messages.length = 0
     },
-    addTypingUser(state, typingUser) {
-      if (state.typingUsers.includes(typingUser)) {
-        return
-      }
-      state.typingUsers.unshift(typingUser)
-    },
-    removeTypingUser(state, typingUser) {
-      state.typingUsers = state.typingUsers.filter(user => user.name !== typingUser.name)
+    toggleDarkTheme(state) {
+      state.darkTheme = !state.darkTheme
     }
   },
   actions: {

@@ -1,5 +1,5 @@
 <template>
-<main id="app">
+<main class="app" :class="{ 'app--dark': darkTheme }">
   <template v-if="currentUser && !isLoading">
     <app-typing-indicator class="typing-indicator" />
     <app-current-user class="current-user" />
@@ -35,18 +35,25 @@ export default {
     AppTypingIndicator
   },
   computed: {
-    ...mapState(['currentUser', 'isLoading'])
+    ...mapState(['currentUser', 'isLoading', 'darkTheme'])
   }
 }
 </script>
 
 <style scoped>
-#app {
+.app {
   display: grid;
   grid-auto-columns: 300px auto;
   grid-auto-rows: 30px 30px auto 70px;
   grid-template-areas: 'user typing' 'user messages' 'rooms messages' 'new send';
   height: 100vh;
+  color: #333;
+  background-color: #fff;
+}
+
+.app--dark {
+  color: #fff;
+  background-color: #333;
 }
 
 .current-user {

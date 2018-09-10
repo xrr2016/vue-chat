@@ -1,5 +1,5 @@
 <template>
-<li class="message" ref="item" :class="{ 'message--self': currentUser.id === message.senderId }">
+<li class="message" ref="item" :class="{ 'message--self': currentUser.id === message.senderId}">
   <p class="meta">{{ message.senderId }}&nbsp;&nbsp;{{ message.createdAt }}</p>
   <p class="text">{{ message.text }}</p>
 </li>
@@ -16,7 +16,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['currentUser'])
+    ...mapState(['currentUser', 'darkTheme'])
   },
   mounted() {
     this.$refs.item.scrollIntoView()
@@ -28,7 +28,6 @@ export default {
 .message {
   max-width: 95%;
   padding: 1em;
-  color: #666;
   border-radius: 4px;
   list-style: none;
 }
@@ -37,8 +36,11 @@ export default {
   align-self: flex-end;
 }
 
+.meta {
+  color: #666;
+}
+
 .text {
-  color: #333;
   margin-top: 4px;
   font-size: 2rem;
   font-weight: 500;

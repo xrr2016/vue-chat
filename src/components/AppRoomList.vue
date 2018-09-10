@@ -1,6 +1,6 @@
 <template>
 <ul class="room-list">
-    <li class="room-item" :class="{'room-item--active': room.id  === activeRoomId}" v-for="room of rooms" :key="room.id" @click="handleClick(room)">
+    <li class="room-item" :class="{'room-item--active': room.id  === activeRoomId, 'room-item--dark': darkTheme, 'room-item--active-dark': room.id  === activeRoomId && darkTheme}" v-for="room of rooms" :key="room.id" @click="handleClick(room)">
       <span class="title">{{ room.name }}</span>
       <span class="number">{{ room.userIds.length }}</span>
     </li>
@@ -14,7 +14,7 @@ import { mapState, mapActions } from 'vuex'
 export default {
   name: 'AppRoomList',
   computed: {
-    ...mapState(['isLoading', 'rooms', 'currentUser'])
+    ...mapState(['isLoading', 'rooms', 'currentUser', 'darkTheme'])
   },
   data() {
     return {
@@ -67,6 +67,11 @@ export default {
 
 .room-item--active {
   background-color: #eee;
+}
+
+.room-item--active-dark {
+  color: #fff;
+  background-color: #333;
 }
 
 .number {

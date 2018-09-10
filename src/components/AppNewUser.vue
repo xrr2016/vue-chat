@@ -36,6 +36,10 @@ export default {
       this.clearErrorMessage()
     },
     async handleSubmit() {
+      this.$Loading.config({
+         color: '#999',
+    failedColor: '#f0ad4e',
+      })
       this.$Loading.start()
       await this.createUser(this.username)
       this.$Loading.finish()

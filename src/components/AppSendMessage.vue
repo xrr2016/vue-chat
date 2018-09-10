@@ -1,8 +1,8 @@
 <template>
-<form class="send-message" v-if="currentRoom" @submit.prevent="handleSubmit">
-  <input class="input" type="text" v-model="text" autofocus required placeholder="说点什么..." />
-  <button class="button" type="submit">发送</button>
-   <Spin fix v-if="isSending"></Spin>
+<form class="send-message"  v-if="currentRoom" @submit.prevent="handleSubmit">
+  <input class="input" :class="{ 'input--dark' : darkTheme}" type="text" v-model="text" autofocus required placeholder="说点什么..." />
+  <button class="button" :class="{ 'button--dark' : darkTheme}" type="submit">发送</button>
+  <Spin fix v-if="isSending"></Spin>
 </form>
 <div class="no-current-room" v-else>还没有加入房间</div>
 </template>
@@ -20,7 +20,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['currentUser', 'currentRoom'])
+    ...mapState(['currentUser', 'currentRoom', 'darkTheme'])
   },
   methods: {
     handleSubmit() {
@@ -64,10 +64,15 @@ export default {
   width: 16rem;
   height: 100%;
   border: none;
-  color: #fff;
+  color: #666;
   font-size: 2rem;
   font-weight: bold;
-  background-color: #00b894;
+  border-left: 1px solid #eee;
+}
+
+.input--dark, .button--dark {
+  color: #fff;
+  background-color: #333;
 }
 
 .no-current-room {
