@@ -4,7 +4,7 @@
   <template v-else>
     <div class="avatar">{{ currentUser.name[0] }}</div>
     <p class="name">{{ currentUser.name }} </p>
-    <!-- <small>createAt: {{ currentUser.created_at | createAt }}</small> -->
+    <Icon type="ios-menu" size="24" />
   </template>
 </div>
 </template>
@@ -31,7 +31,7 @@ export default {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  padding-left: 1rem;
+  padding: 0 1rem;
   border-right: 1px solid #eee;
   border-bottom: 1px solid #eee;
 }
@@ -48,6 +48,7 @@ export default {
 }
 
 .name {
+  flex: 1;
   color: #666;
   font-size: 1.4rem;
 }

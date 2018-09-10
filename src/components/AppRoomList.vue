@@ -1,35 +1,47 @@
 <template>
 <ul class="room-list">
-  <div v-if="isLoading">Loading...</div>
-  <template v-else>
-    <li class="room-item room-item--active" v-if="currentRoom">
-      <span class="title">{{ currentRoom.name }}</span>
-      <span class="number">{{ currentRoom.userIds.length }}</span>
-    </li>
-    <li class="room-item" v-for="room of rooms" :key="room.id" @click="handleClick">
+    <li class="room-item" :class="{'room-item--active': room.id  === activeRoomId}" v-for="room of rooms" :key="room.id" @click="handleClick(room)">
       <span class="title">{{ room.name }}</span>
       <span class="number">{{ room.userIds.length }}</span>
     </li>
-  </template>
+     <Spin fix v-if="isLoading"></Spin>
 </ul>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'AppRoomList',
   computed: {
-    ...mapState(['isLoading', 'rooms', 'currentRoom'])
+    ...mapState(['isLoading', 'rooms', 'currentUser'])
+  },
+  data() {
+    return {
+      activeRoomId: ''
+    }
   },
   methods: {
-    handleClick() {}
+    ...mapActions(['leaveRoom', 'joinRoom', 'subscribeRoom', 'fetchRoomMessages']),
+    async handleClick(room) {
+      const roomId = room.id
+      if (roomId === this.activeRoomId) {
+        return
+      }
+      this.activeRoomId = roomId
+      this.$Loading.start()
+      await this.joinRoom(roomId)
+      await this.fetchRoomMessages(roomId)
+      await this.subscribeRoom(roomId)
+      this.$Loading.finish()
+    }
   }
 }
 </script>
 
 <style scoped>
 .room-list {
+  position: relative;
   min-height: calc(100vh - 130px);
   max-height: calc(100vh - 130px);
   overflow-x: hidden;

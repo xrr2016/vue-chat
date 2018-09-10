@@ -1,13 +1,9 @@
 <template>
 <section class="new-user">
-  <div class="user-info" v-if="userInfo">{{ userInfo.name }}</div>
-  <form class="new-user__form" v-else @submit.prevent="handleSubmit">
+  <form class="new-user__form" @submit.prevent="handleSubmit">
     <input class="new-user__input" @focus="handleFoucs" @input="handleInput" @blur="handleBlur" v-model="username" placeholder="输入你的名字" autofocus required />
   </form>
-  <div class="new-user__stat">
-    <span class="new-user__donut" v-if="isLoading"></span>
-    <small class="new-user__error" v-if="errorMessage.length">{{ errorMessage }}</small>
-  </div>
+  <div class="new-user__error" v-if="errorMessage.length">{{ errorMessage }}</div>
 </section>
 </template>
 
@@ -24,11 +20,11 @@ export default {
     }
   },
   computed: {
-    ...mapState(['isLoading', 'errorMessage', 'userInfo'])
+    ...mapState(['isLoading', 'errorMessage'])
   },
   methods: {
     ...mapActions(['createUser']),
-    ...mapMutations(['clearErrorMessage', 'setLoaded']),
+    ...mapMutations(['clearErrorMessage']),
     handleFoucs() {
       this.isFoucs = true
       this.clearErrorMessage()
@@ -39,8 +35,10 @@ export default {
     handleInput() {
       this.clearErrorMessage()
     },
-    handleSubmit() {
-      this.createUser(this.username)
+    async handleSubmit() {
+      this.$Loading.start()
+      await this.createUser(this.username)
+      this.$Loading.finish()
     }
   }
 }
@@ -54,32 +52,21 @@ export default {
   z-index: 10;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   width: 100vw;
   height: 100vh;
 }
 
-.user-info {
-  margin-bottom: 1rem;
-}
-
 .new-user__form {
-  margin-top: -180px;
+  width: 95%;
+  max-width: 720px;
+  margin-top: 200px;
   margin-bottom: 1rem;
-}
-
-.new-user__stat {
-  width: 100%;
-  min-height: 80px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
 }
 
 .new-user__input {
-  width: 960px;
+  width: 100%;
   color: #333;
   padding: 1em;
   font-size: 2rem;
@@ -87,26 +74,6 @@ export default {
   outline: none;
   border: none;
   border-bottom: 1px solid #999;
-}
-
-.new-user__donut {
-  display: inline-block;
-  border: 4px solid rgba(0, 0, 0, 0.1);
-  border-left-color: grey;
-  border-radius: 50%;
-  width: 30px;
-  height: 30px;
-  margin-bottom: 4px;
-  animation: donut-spin 1.2s linear infinite;
-}
-
-@keyframes donut-spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
 }
 
 .new-user__error {

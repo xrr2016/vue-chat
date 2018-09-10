@@ -60,8 +60,10 @@ export default {
   height: 100%;
   border: none;
   outline: none;
+  color: #666;
   background-color: transparent;
 }
+
 .room-name {
   width: 100%;
 }

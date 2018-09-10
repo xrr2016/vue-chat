@@ -1,9 +1,6 @@
 <template>
-<ul class="message-list">
-  <div class="loading" v-if="isLoading">Loading...</div>
-  <template v-else>
+<ul class="message-list" ref="messages">
     <app-message-item v-for="(message, index) of messages" :key="index" :message="message" />
-  </template>
 </ul>
 </template>
 
@@ -17,7 +14,7 @@ export default {
     AppMessageItem
   },
   computed: {
-    ...mapState(['messages', 'isLoading'])
+    ...mapState(['messages'])
   }
 }
 </script>

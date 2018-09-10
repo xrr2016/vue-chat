@@ -2,12 +2,13 @@
 <form class="send-message" v-if="currentRoom" @submit.prevent="handleSubmit">
   <input class="input" type="text" v-model="text" autofocus required placeholder="说点什么..." />
   <button class="button" type="submit">发送</button>
+   <Spin fix v-if="isSending"></Spin>
 </form>
 <div class="no-current-room" v-else>还没有加入房间</div>
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 
 export default {
   name: 'AppSendMessage',
@@ -18,29 +19,10 @@ export default {
       isSending: false
     }
   },
-  watch: {
-    text: 'handleChange'
-  },
   computed: {
     ...mapState(['currentUser', 'currentRoom'])
   },
   methods: {
-    ...mapMutations(['addTypingUser', 'removeTypingUser']),
-    handleChange(text, prevText) {
-      this.addTypingUser(this.currentUser)
-      const timeout = setTimeout(() => {
-        // if (text === prevText) {
-        this.removeTypingUser(this.currentUser)
-        // }
-        clearTimeout(timeout)
-      }, 1000)
-      console.log(this.currentRoom.id)
-      this.currentUser
-        .isTypingIn({
-          roomId: this.currentRoom.id
-        })
-        .catch(error => console.error(error))
-    },
     handleSubmit() {
       if (!this.text || this.isSending) {
         return
@@ -53,13 +35,7 @@ export default {
         })
         .then(messageId => {
           this.text = ''
-          console.log(messageId)
-        })
-        .then(() => {
-          const timeout = setTimeout(() => {
-            this.isSending = false
-            clearTimeout(timeout)
-          }, 500)
+          this.isSending = false
         })
         .catch(error => console.log(error))
     }
@@ -69,22 +45,24 @@ export default {
 
 <style scoped>
 .send-message {
+  position: relative;
   display: flex;
   justify-content: flex-start;
-  align-items: stretch;
+  align-items: center;
 }
 
 .input {
   flex: 1;
+  height: 100%;
   font-size: 2.4rem;
   border: none;
   outline: none;
   padding: 1em;
-  text-decoration: underline;
 }
 
 .button {
   width: 16rem;
+  height: 100%;
   border: none;
   color: #fff;
   font-size: 2rem;

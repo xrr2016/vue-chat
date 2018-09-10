@@ -6,20 +6,14 @@ Vue.use(Vuex)
 const Chatkit = require('@pusher/chatkit')
 const config = require('../config')
 
-export const CHAT_USER_INFO = 'CHAT_USER_INFO'
-export const CHAT_LAST_ROOM_ID = 'CHAT_LAST_ROOM_ID'
-
 const store = new Vuex.Store({
   state: {
     isLoading: false,
-    userInfo: null,
     currentUser: null,
     currentRoom: null,
-    lastRoom: null,
     rooms: [],
     users: [],
     messages: [],
-    typingUsers: [],
     theme: 'light',
     layout: 'normal',
     errorMessage: ''
@@ -49,14 +43,25 @@ const store = new Vuex.Store({
     setCurrentRoom(state, currentRoom) {
       state.currentRoom = currentRoom
     },
-    setRooms(state, joinableRooms) {
-      state.rooms = joinableRooms
+    setRooms(state, rooms) {
+      state.rooms = rooms
+    },
+    setJoinableRooms(state, joinableRooms) {
+      joinableRooms.forEach(room => {
+        state.rooms.push(room)
+      })
     },
     addNewRoom(state, room) {
       state.rooms.push(room)
     },
     addNewMessage(state, message) {
       state.messages.push(message)
+    },
+    setRoomMessages(state, messages) {
+      state.messages = messages
+    },
+    clearRoomMessages(state) {
+      state.messages.length = 0
     },
     addTypingUser(state, typingUser) {
       if (state.typingUsers.includes(typingUser)) {
@@ -84,7 +89,6 @@ const store = new Vuex.Store({
       if (result.success) {
         const user = result.user
         dispatch('initChatApp', user.name)
-        localStorage.setItem(CHAT_USER_INFO, JSON.stringify(user))
       } else {
         if (result.message === 'User with given id already exists') {
           commit('setErrorMessage', '用户已存在请重试')
@@ -96,47 +100,53 @@ const store = new Vuex.Store({
     },
     async initChatApp({ commit, dispatch }, userId, lastRoomId) {
       commit('setLoading')
+      const tokenProvider = new Chatkit.TokenProvider({
+        url: `${config.SERVER_HOST}:${config.SERVER_PORT}/auth`
+      })
       const chatManager = new Chatkit.ChatManager({
         userId,
         instanceLocator: config.CHATKIT_INSTANCELOCATOR,
-        tokenProvider: new Chatkit.TokenProvider({
-          url: `${config.SERVER_HOST}:${config.SERVER_PORT}/auth`
-        })
+        tokenProvider
       })
 
       const currentUser = await chatManager.connect().catch(error => {
         commit('setErrorMessage', error.message)
       })
+
       commit('setCurrentUser', currentUser)
-      dispatch('getRooms')
+      commit('setRooms', currentUser.rooms)
+      dispatch('getJoinableRooms')
 
       if (lastRoomId) {
-        const currentRoom = await currentUser.subscribeToRoom({
-          roomId: 15624742,
-          messageLimit: 100,
-          hooks: {
-            onNewMessage: message => {
-              commit('addNewMessage', message)
-            },
-            onUserStartedTyping: user => {
-              commit('addTypingUser', user)
-            },
-            onUserStoppedTyping: user => {
-              commit('removeTypingUser', user)
-            },
-            onUserCameOnline: user => console.log(user),
-            onUserWentOffline: user => console.log(user),
-            onUserJoined: user => console.log(user)
-          }
-        })
-        commit('setCurrentRoom', currentRoom)
+        dispatch('subscribeRoom', lastRoomId)
       }
 
       commit('setLoaded')
     },
-    async getRooms({ state, commit }) {
+    async subscribeRoom({ state, commit }, roomId) {
+      const currentRoom = await state.currentUser.subscribeToRoom({
+        roomId,
+        messageLimit: 20,
+        hooks: {
+          onNewMessage: message => {
+            commit('addNewMessage', message)
+          },
+          onUserStartedTyping: user => {
+            commit('addTypingUser', user)
+          },
+          onUserStoppedTyping: user => {
+            commit('removeTypingUser', user)
+          },
+          onUserCameOnline: user => console.log(user),
+          onUserWentOffline: user => console.log(user),
+          onUserJoined: user => console.log(user)
+        }
+      })
+      commit('setCurrentRoom', currentRoom)
+    },
+    async getJoinableRooms({ state, commit }) {
       const rooms = await state.currentUser.getJoinableRooms()
-      commit('setRooms', rooms)
+      commit('setJoinableRooms', rooms)
     },
     async createRoom({ state, commit }, name) {
       return state.currentUser
@@ -151,20 +161,43 @@ const store = new Vuex.Store({
         .catch(err => {
           console.log(`Error creating room ${err}`)
         })
+    },
+    leaveRoom({ state, commit }, roomId) {
+      return state.currentUser
+        .leaveRoom({ roomId })
+        .then(room => {
+          console.log(`Left room with ID: ${room.id}`)
+        })
+        .catch(err => {
+          console.log(`Error leaving room ${err}`)
+        })
+    },
+    joinRoom({ state, commit }, roomId) {
+      commit('clearRoomMessages')
+      return state.currentUser
+        .joinRoom({ roomId })
+        .then(room => {
+          commit('setCurrentRoom', room)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
+    fetchRoomMessages({ state, commit }, roomId) {
+      return state.currentUser
+        .fetchMessages({
+          roomId: roomId,
+          direction: 'older',
+          limit: 10
+        })
+        .then(messages => {
+          commit('setRoomMessages', messages)
+        })
+        .catch(err => {
+          console.log(`Error fetching messages: ${err}`)
+        })
     }
   }
 })
-
-try {
-  const userInfo = JSON.parse(localStorage.getItem(CHAT_USER_INFO))
-  const lastRoomId = JSON.parse(localStorage.getItem(CHAT_LAST_ROOM_ID))
-
-  if (userInfo) {
-    store.commit('setUserInfo', userInfo)
-    store.dispatch('initChatApp', userInfo.name, lastRoomId)
-  }
-} catch (error) {
-  console.log(error)
-}
 
 export default store

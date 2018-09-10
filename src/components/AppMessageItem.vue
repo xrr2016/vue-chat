@@ -1,5 +1,5 @@
 <template>
-<li class="message" :class="{ 'message--self': currentUser.id === message.senderId }">
+<li class="message" ref="item" :class="{ 'message--self': currentUser.id === message.senderId }">
   <p class="meta">{{ message.senderId }}&nbsp;&nbsp;{{ message.createdAt }}</p>
   <p class="text">{{ message.text }}</p>
 </li>
@@ -17,6 +17,9 @@ export default {
   },
   computed: {
     ...mapState(['currentUser'])
+  },
+  mounted() {
+    this.$refs.item.scrollIntoView()
   }
 }
 </script>
