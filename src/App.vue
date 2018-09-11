@@ -29,7 +29,7 @@
       <message-item v-for="(message, index) of messages" :key="index" :message="message" :currentUser="currentUser" />
     </ul>
     <form class="chat__send" @submit.prevent="sendMessage">
-      <input class="input" :class="{ 'input--dark': darkTheme }" type="text" v-model="newMessage" autofocus required placeholder="说点什么..." />
+      <input class="input" :class="{ 'input--dark': darkTheme }" type="text" @change="typingMessage" v-model="newMessage" autofocus required placeholder="说点什么..." />
       <button class="button" :class="{ 'button--dark': darkTheme }" type="submit">发送</button>
       <Spin fix v-if="isSendingMessage"></Spin>
     </form>
@@ -43,7 +43,7 @@
       <p class="create__or">OR</p>
     </template>
     <form class="create__form" :class="{ 'create__form--top': createdUsers.length }" @submit.prevent="createUser">
-      <input class="create__input" v-model="newUserName" @change="typingMessage" placeholder="输入你的名字" autofocus required />
+      <input class="create__input" v-model="newUserName" placeholder="输入你的名字" autofocus required />
     </form>
   </section>
 </main>
