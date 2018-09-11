@@ -1,10 +1,14 @@
 # vue-chat
 
-[Demo](https://rocky-journey-27443.herokuapp.com/)
+> [CHATKIT](https://dash.pusher.com/chatkit)
 
 ## 截图
 
-## 项目启动
+![init](./screenshot/init.png)
+
+![init](./screenshot/chat.png)
+
+## Usage
 
 ```
 git clone git@github.com:xrr2016/vue-chat.git
@@ -12,9 +16,11 @@ git clone git@github.com:xrr2016/vue-chat.git
 yarn install
 ```
 
-### 启动 express 服务
+### 启动
 
 ```
+yarn  build
+
 yarn run server
 ```
 
@@ -35,3 +41,7 @@ yarn run build
 ```
 yarn run lint
 ```
+
+## Licence
+
+[MIT](./License)
