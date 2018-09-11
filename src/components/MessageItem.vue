@@ -1,25 +1,25 @@
 <template>
 <li class="message" ref="item" :class="{ 'message--self': currentUser.id === message.senderId}">
-  <p class="meta">{{ message.senderId }}&nbsp;&nbsp;{{ message.createdAt }}</p>
+  <p class="meta">{{ message.senderId }} {{ message.createdAt }}</p>
   <p class="text">{{ message.text }}</p>
 </li>
 </template>
 
 <script>
-import { mapState } from 'vuex'
 export default {
   name: 'AppMessageItem',
   props: {
+    currentUser: {
+      type: Object,
+      required: true
+    },
     message: {
       type: Object,
       required: true
     }
   },
-  computed: {
-    ...mapState(['currentUser', 'darkTheme'])
-  },
   mounted() {
-    this.$refs.item.scrollIntoView()
+    this.$refs.item.scrollIntoView(false)
   }
 }
 </script>
@@ -37,7 +37,7 @@ export default {
 }
 
 .meta {
-  color: #666;
+  opacity: 0.7;
 }
 
 .text {

@@ -1,21 +1,37 @@
-# 👥 vue-chat
+# vue-chat
 
-## Project setup
+[Demo]()
+
+## 截图
+
+## 项目启动
+
 ```
+git clone git@github.com:xrr2016/vue-chat.git
+
 yarn install
 ```
 
-### Compiles and hot-reloads for development
+### 启动 express 服务
+
+```
+yarn run server
+```
+
+### 前端开发
+
 ```
 yarn run serve
 ```
 
-### Compiles and minifies for production
+### Build
+
 ```
 yarn run build
 ```
 
-### Lints and fixes files
+### Lint
+
 ```
 yarn run lint
 ```

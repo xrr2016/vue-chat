@@ -1,4 +1,5 @@
 const cors = require('cors')
+const path = require('path')
 const express = require('express')
 const morgan = require('morgan')
 const Chatkit = require('pusher-chatkit-server')
@@ -17,6 +18,8 @@ const chatkit = new Chatkit.default({
   instanceLocator: config.CHATKIT_INSTANCELOCATOR,
   key: config.CHATKIT_KEY
 })
+
+app.use('/', express.static(path.join(__dirname, '../dist')))
 
 app.post('/user', (req, res) => {
   const { username } = req.body
